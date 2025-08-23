@@ -1,0 +1,10 @@
+# Maven build folder
+Javaselenium/target/
+
+# Logs
+*.log
+
+# IDE files
+.classpath
+.project
+.settings/
