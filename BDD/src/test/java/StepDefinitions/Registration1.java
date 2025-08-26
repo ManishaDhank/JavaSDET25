@@ -54,7 +54,7 @@ public class Registration1 {
 	}
 
 	@When("user selects hobbies")
-	  WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	 
 	public void user_selects_hobbies() throws InterruptedException {
 		rp.selectHobby();
 		Thread.sleep(2000);
