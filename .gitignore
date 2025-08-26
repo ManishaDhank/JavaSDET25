@@ -8,3 +8,5 @@ Javaselenium/target/
 .classpath
 .project
 .settings/
+target/
+BDD/target/
