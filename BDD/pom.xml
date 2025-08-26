@@ -123,7 +123,7 @@
     <source>21</source>
     <target>21</target>
     <compilerArgs>
-      <!-- remove all --add-exports / --add-opens -->
+     
     </compilerArgs>
   </configuration>
 </plugin>
