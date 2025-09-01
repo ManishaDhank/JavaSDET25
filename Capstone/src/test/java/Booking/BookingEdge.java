@@ -48,9 +48,10 @@ public class BookingEdge {
     	WebElement submit = driver.findElement(By.xpath("//button[@type='submit']"));
     	submit.click();
     	
-    	
-    	WebElement avl=driver.findElement(By.xpath("//*[@id=\"bodyconstraint-inner\"]/div/div/div[2]/div[3]/div[2]/div[2]/div[3]/div[1]/div[1]/div[2]/div/div[3]/div[2]/div/div[2]/a"));
-    	avl.click();
+    	// hotel title link
+    	WebElement hotelLink = driver.findElement(By.xpath("//a[contains(@data-testid,'title-link')]"));
+    	hotelLink.click();
+
     	Thread.sleep(1000);
     	String originalWindow = driver.getWindowHandle();
         for (String windowHandle : driver.getWindowHandles()) {
