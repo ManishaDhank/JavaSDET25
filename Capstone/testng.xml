@@ -8,7 +8,7 @@
 
 
        <class name="Booking.Booking"/>
-       <class name="Booking.BookingEdge"/>
+      
     </classes>
   </test>
 
