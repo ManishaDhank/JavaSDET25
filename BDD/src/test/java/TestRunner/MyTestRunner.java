@@ -9,7 +9,7 @@ import io.cucumber.testng.CucumberOptions;
  
 //@RunWith(Cucumber.class)
 @CucumberOptions(
-		features = {"src/test/resources/Features/registration.feature"}
+		features = {"src/test/resources/Features/Booking.feature"}
 		,glue = {"StepDefinitions","Hooks"},
 		tags = "@regression",
 		plugin = {"pretty","html:target/cucumber-reports.html"},
