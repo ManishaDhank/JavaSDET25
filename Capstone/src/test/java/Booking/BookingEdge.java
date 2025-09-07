@@ -77,23 +77,18 @@ public class BookingEdge {
     public void fillPersonalDetails() throws InterruptedException {
         WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstname")));
         firstName.sendKeys("John");
-        Thread.sleep(1000);
 
         WebElement lastName = driver.findElement(By.name("lastname"));
         lastName.sendKeys("Doe");
-        Thread.sleep(1000);
 
         WebElement email = driver.findElement(By.name("email"));
         email.sendKeys("johndoe123@gmail.com");
-        Thread.sleep(1000);
 
         WebElement phone = driver.findElement(By.name("phoneNumber"));
         phone.sendKeys("9784469446");
-        Thread.sleep(1000);
 
         WebElement details = driver.findElement(By.xpath("//button[@name='book']"));
         details.click();
-        Thread.sleep(1000);
     }
 
     @Test(priority = 4, groups = {"regression", "booking"})
@@ -121,4 +116,4 @@ public class BookingEdge {
 
         Thread.sleep(1000);
         */
-       
+      
