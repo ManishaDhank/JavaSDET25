@@ -3,13 +3,17 @@
 <suite name="Suite1" verbose="1">
  
   <test name="Nopackage">
- 
+ <groups>
+            <run>
+                <include name="regression"/>
+                 <include name="smoke"/>
+            </run>
+        </groups>
     <classes>
 
 
        <class name="Booking.Booking"/>
-      <class name="Booking.BookingEdge"/>
-      
+       <class name="Booking.BookingEdge"/>
     </classes>
   </test>
 
