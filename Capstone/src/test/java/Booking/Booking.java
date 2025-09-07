@@ -1,130 +1,108 @@
 package Booking;
 
-
 import java.time.Duration;
 import java.util.List;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
+import org.openqa.selenium.support.ui.*;
+import org.testng.annotations.*;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Booking {
-	
-	// Test Case 1: Positive Login Test
-    @Test(priority = 0)
-    public void Bookingflow() throws InterruptedException {
-    	ChromeOptions chromeOptions = new ChromeOptions();
-    	WebDriverManager.chromedriver().setup();
-    	WebDriver driver = new ChromeDriver(chromeOptions);
 
-    	driver.get("https://www.booking.com/");
-    	driver.manage().window().maximize();
-    	Thread.sleep(2000);
+    WebDriver driver;
+    WebDriverWait wait;
 
-    	// Enter destination
-    	WebElement search = driver.findElement(By.name("ss"));
-    	search.sendKeys("New Delhi");
-    	Thread.sleep(1000);
+    @BeforeClass(alwaysRun = true)
+    public void setup() {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver(chromeOptions);
+        driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        driver.get("https://www.booking.com/");
+    }
 
-    	// Click date field
-    	WebElement dateField = driver.findElement(By.xpath("//button[@data-testid='searchbox-dates-container']"));
-    	dateField.click();
-    	Thread.sleep(1000);
+    @Test(priority = 0, groups = {"smoke", "search"})
+    public void searchDestination() throws InterruptedException {
+        WebElement search = driver.findElement(By.name("ss"));
+        search.sendKeys("New Delhi");
+        Thread.sleep(1000);
 
-    	// Pick check-in date (10 September 2025)
-    	WebElement checkIn = driver.findElement(By.xpath("//span[@aria-label='Th 18 September 2025']"));
-    	checkIn.click();
+        WebElement dateField = driver.findElement(By.xpath("//button[@data-testid='searchbox-dates-container']"));
+        dateField.click();
 
-    	// Pick check-out date (11 September 2025)
-    	WebElement checkOut = driver.findElement(By.xpath("//span[@aria-label='Fr 19 September 2025']"));
-    	checkOut.click();
-    	Thread.sleep(1000);
+        WebElement checkIn = driver.findElement(By.xpath("//span[@aria-label='Th 18 September 2025']"));
+        checkIn.click();
 
-    	// Submit search
-    	WebElement submit = driver.findElement(By.xpath("//button[@type='submit']"));
-    	submit.click();
-    	
-    	// hotel title link
-    	WebElement hotelLink = driver.findElement(By.xpath("//a[contains(@data-testid,'title-link')]"));
-    	hotelLink.click();
+        WebElement checkOut = driver.findElement(By.xpath("//span[@aria-label='Fr 19 September 2025']"));
+        checkOut.click();
 
-    	Thread.sleep(1000);
-    	String originalWindow = driver.getWindowHandle();
+        WebElement submit = driver.findElement(By.xpath("//button[@type='submit']"));
+        submit.click();
+    }
+
+    @Test(priority = 1, groups = {"regression", "hotel"})
+    public void selectHotel() {
+        WebElement hotelLink = wait.until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//a[contains(@data-testid,'title-link')]")));
+        hotelLink.click();
+
+        String originalWindow = driver.getWindowHandle();
         for (String windowHandle : driver.getWindowHandles()) {
             if (!windowHandle.equals(originalWindow)) {
                 driver.switchTo().window(windowHandle);
                 break;
             }
         }
+    }
 
-
-        // Step 2: Wait for room table
-        
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-        
+    @Test(priority = 2, groups = {"regression", "booking"})
+    public void selectRoom() throws InterruptedException {
         WebElement roomTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.hprt-table")));
-
-        // Step 3: Select first room from drop down
-        
         List<WebElement> dropdowns = roomTable.findElements(By.cssSelector("select.hprt-nos-select"));
-        
+
         Select firstDropdown = new Select(dropdowns.get(0));
-        
         firstDropdown.selectByValue("1");
-        
-        WebElement re=driver.findElement(By.xpath("//button[contains(@class,'hp_rt_input px--fw-cta js-reservation-button')]"));
-        re.click();
         Thread.sleep(1000);
-        
-     // Wait helper
-        WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        // First name
-        WebElement firstName = wait1.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstname")));
+        WebElement reserveBtn = driver.findElement(By.xpath("//button[contains(@class,'js-reservation-button')]"));
+        reserveBtn.click();
+    }
+
+    @Test(priority = 3, groups = {"smoke", "booking"})
+    public void fillPersonalDetails() throws InterruptedException {
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstname")));
         firstName.sendKeys("John");
-        Thread.sleep(1000);
 
-        // Last name
         WebElement lastName = driver.findElement(By.name("lastname"));
         lastName.sendKeys("Doe");
-        Thread.sleep(1000);
 
-        // Email address
         WebElement email = driver.findElement(By.name("email"));
         email.sendKeys("johndoe123@gmail.com");
-        Thread.sleep(1000);
-        
-        WebElement num=driver.findElement(By.name("phoneNumber"));
-        num.sendKeys("9784469446");
-        Thread.sleep(1000);
-        
-        WebElement details=driver.findElement(By.xpath("//button[@name='book']"));
-        details.click();
-        
-        WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(10));
-       
-     // Wait for popup and click the "Yes, continue" confirm button
-       WebElement yes= wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@class='bui-button bui-button--secondary']")));
 
-     yes.click();
-        Thread.sleep(1000);
-        
-        WebElement book=wait2.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[@class='bui-button__text js-button__text']")));
-        book.click();
-        
-        
-        Thread.sleep(2000);
-     
+        WebElement phone = driver.findElement(By.name("phoneNumber"));
+        phone.sendKeys("9784469446");
+
+        WebElement details = driver.findElement(By.xpath("//button[@name='book']"));
+        details.click();
     }
-  
-        
-       
+
+    @Test(priority = 4, groups = {"booking", "regression"})
+    public void confirmBooking() throws InterruptedException {
+        WebElement book = wait.until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//span[@class='bui-button__text js-button__text']")));
+        book.click();
+        Thread.sleep(2000);
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
 }
