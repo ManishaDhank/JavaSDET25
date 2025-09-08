@@ -8,3 +8,4 @@ Feature: Hotel Booking on Booking.com
     And user selects a room
     And user fills personal details "John" "Doe" "johndoe123@gmail.com" "9784469446"
     Then user confirms the booking
+
